@@ -1,5 +1,8 @@
 *.py[cod]
 
+# Media files (illegal to distribute)
+*.arcx
+
 # C extensions
 *.so
 
