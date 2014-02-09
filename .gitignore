@@ -3,6 +3,9 @@
 # Media files (illegal to distribute)
 *.arcx
 
+# Error log
+error.log
+
 # C extensions
 *.so
 
