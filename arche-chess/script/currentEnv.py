@@ -1,0 +1,3 @@
+
+print(self)
+print(c)
