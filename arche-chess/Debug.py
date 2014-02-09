@@ -4,10 +4,15 @@ import logging
 from logging import *
 import sys
 
+formatLogging = "%(lineno)4d | %(asctime)s | %(levelname)8s | %(name)s |: %(message)s"
+levelGameConsole = INFO
+levelSystemConsole = INFO
+levelLogFile = INFO
+
 exec(open("config/debug.cfg").read())
 
 log = logging.getLogger("R") # "R" stands for 'root'
-log.setLevel(logging.DEBUG)
+log.setLevel(levelGameConsole)
 
 console = logging.StreamHandler()
 console.setLevel(levelSystemConsole)
@@ -15,8 +20,7 @@ console.setLevel(levelSystemConsole)
 logfile = logging.FileHandler("error.log")
 logfile.setLevel(levelLogFile)
 
-formatter = logging.Formatter(
-    "%(lineno)4d | %(asctime)s | %(levelname)8s | %(name)s |: %(message)s")
+formatter = logging.Formatter(formatLogging)
 
 console.setFormatter(formatter)
 logfile.setFormatter(formatter)
