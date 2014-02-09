@@ -3,8 +3,8 @@ import pygame
 from pygame.locals import *
 import logging
 
-import Engine
-import Sprite
+from . import Engine
+from . import Sprite
 
 log = logging.getLogger("R.Interface")
 

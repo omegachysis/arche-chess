@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import Engine
-import Debug
+from Arche import *
 
 import logging
 

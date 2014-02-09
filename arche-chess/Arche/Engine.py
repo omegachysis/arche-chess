@@ -7,12 +7,12 @@ import pygame.freetype
 import traceback
 import logging
 
-from Motion.Action import Action
+from Arche.Motion.Action import Action
 
-import Debug
+from . import Debug
 #import Interface
-import Console
-import Sprite
+from . import Console
+from . import Sprite
 
 log = logging.getLogger("R.Engine")
 
