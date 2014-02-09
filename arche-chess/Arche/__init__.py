@@ -1,5 +1,5 @@
 
 __all__ = [
-    "Console", "Debug", "Engine", "Interface",
-    "Sprite", "Motion",
+    "console", "debug", "engine", "interface",
+    "sprite", "motion",
     ]

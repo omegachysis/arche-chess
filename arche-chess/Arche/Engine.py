@@ -7,12 +7,12 @@ import pygame.freetype
 import traceback
 import logging
 
-from Arche.Motion.Action import Action
+from .motion import action
 
-from . import Debug
+from . import debug
 #import Interface
-from . import Console
-from . import Sprite
+from . import console
+from . import sprite
 
 log = logging.getLogger("R.Engine")
 
@@ -38,11 +38,11 @@ class Game(object):
         pygame.display.set_caption("My Game")
         self.clock = pygame.time.Clock()
 
-        self.gameConsole = Console.GameConsole(self, Debug.levelGameConsole)
+        self.gameConsole = console.GameConsole(self, debug.levelGameConsole)
 
         Application.canvas = self.canvas
         Application.game = self
-        Sprite.Sprite.game = self
+        sprite.Sprite.game = self
 
         self.app = None
 
