@@ -12,11 +12,10 @@ levelLogFile = INFO
 exec(open("config/debug.cfg").read())
 
 alog = logging.getLogger("R")
-alog.setLevel(levelGameConsole)
+alog.setLevel(DEBUG)
 
 console = logging.StreamHandler()
 console.setLevel(levelSystemConsole)
-
 logfile = logging.FileHandler("error.log")
 logfile.setLevel(levelLogFile)
 

@@ -38,6 +38,8 @@ class Game(object):
         pygame.display.set_caption("My Game")
         self.clock = pygame.time.Clock()
 
+        log.debug("DEBUG.LEVELGAMECONSOLE = {}".format(debug.levelGameConsole))
+
         self.gameConsole = console.GameConsole(self, debug.levelGameConsole)
 
         Application.canvas = self.canvas
