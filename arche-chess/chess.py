@@ -1,95 +1,99 @@
 #!/usr/bin/env python3
 
+from arche import engine
+from arche import debug
+
 import subprocess
-import time
 
-def start():
-    engine = subprocess.Popen(
-        "chess/stockfish-dd-64-modern.exe",
-        universal_newlines = True,
-        stdin = subprocess.PIPE,
-        stdout = subprocess.PIPE,
-        )
+log = debug.log("game chess")
 
-    return engine
+def main():
+    game = engine.Game(1024, 768, False)
+    game.startApp(Chess())
+    game.run()
 
-def put(engine, command):
-    engine.stdin.write(command + "\n")
+class Player(object):
+    app = None
 
-def get(engine):
-    data = ""
-    engine.stdin.write('isready\n')
-    while True:
-        text = engine.stdout.readline().strip()
-        if text == 'readyok':
-            break
-        if text !='':
-            data += text
-    if data:
-        print(data)
-    return data
-
-def checkLegal(engine, move):
-    put(engine, "go depth 5 searchmoves " + move)
-    while True:
-        r = get(engine)
-        if "bestmove" in r:
-            results = r[r.index("bestmove") + 9:].split(" ")
-            testmove = results[0]
-            print(r)
-            pondermove = results[2]
-            break
-    return testmove != "(none)"
-
-def setPosition(engine, moves):
-    put(engine, "position startpos moves " + ' '.join(moves))
-    get(engine)
-
-if __name__ == "__main__":
-    print("Let's play CHESS!")
-    engine = start()
-    get(engine)
-    put(engine, "uci")
-    get(engine)
-    put(engine, "ucinewgame")
-    get(engine)
+class PlayerHuman(Player):
+    def __init__(self):
+        pass
     
-    moves = []
-    
-    while True:
-        setPosition(engine, moves)
-
-        print("")
-        print("-----------------------------")
+    def move(self, board):
+        move = None
         while True:
-            print("What is your move? ")
-            whitemove = input(" :: ")
-            if checkLegal(engine, whitemove):
+            move = input("Your move: ")
+            if board.isMoveLegal(move):
                 break
             else:
-                print("That is not a legal move!")
-        print("-----------------------------")
-        print("")
-        moves.append(whitemove)
+                print("Not a legal move!")
+        return move
+    
+class PlayerComputer(Player):
+    def __init__(self, depth=12):
+        self.depth = depth
 
-        setPosition(engine, moves)
-
-        put(engine, "go depth 12")
+    def move(self, board):
+        move = None
+        self.app.enginePut("go depth {}".format(self.depth))
         while True:
-            r = get(engine)
+            r = self.app.engineGet()
             if "bestmove" in r:
                 results = r[r.index("bestmove") + 9:].split(" ")
-                blackmove = results[0]
-                moves.append(blackmove)
-                print(r)
+                move = results[0]
                 pondermove = results[2]
                 break
+        board.move(move)
 
-        print("")
-        print("==========================")
-        print("BLACK PLAYS: ")
-        print(blackmove)
-        print("==========================")
-        print("")
-        
-        
+class Board(object):
+    moves = []
+    app = None
+    def __init__(self):
+        pass
+    def move(self, move):
+        moves.append(move)
+    def isMoveLegal(self, move):
+        pass
+
+class Chess(engine.Application):
+    playerWhite = None
+    playerBlack = None
+    def __init__(self, playerWhite, playerBlack):
+        super(Chess, self).__init__()
+
+        self.backgroundColor = (80,0,0)
+
+        self.playerWhite = playerWhite
+        self.playerBlack = playerBlack
+
+        log.info("Starting stockfish")
+        self.engine = subprocess.Popen(
+            "chess/stockfish-dd-64-modern.exe",
+            universal_newlines = True,
+            stdin = subprocess.PIPE,
+            stdout = subprocess.PIPE,
+            )
+
+        Player.app = self
+        Board.app = self
+
+        self.enginePut("uci")
+
+    def enginePut(self, command):
+        self.engine.stdin.write(command + "\n")
+    def engineGet(self):
+        data = ""
+        engine.stdin.write('isready\n')
+        while True:
+            text = engine.stdout.readline().strip()
+            if text == 'readyok':
+                break
+            if text !='':
+                data += text
+        return data
+
+    def gameStart(self):
+        pass
+
+if __name__ == "__main__":
+    debug.test(main)
