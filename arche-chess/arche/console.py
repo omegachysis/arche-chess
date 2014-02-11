@@ -43,7 +43,7 @@ class DialogEntry(object):
                     if event.key == K_ESCAPE:
                         self.postEvent(QUIT)
                     elif event.key == K_RETURN:
-                        self.value = self.entry
+                        self.value = str(self.entry)
                     elif event.key == K_BACKSPACE:
                         self.entryBackspace()
                     else:
@@ -52,7 +52,8 @@ class DialogEntry(object):
             self.draw(self.game.canvas)
 
             pygame.display.update()
-            
+
+        log.debug("Return VALUE: {}".format(repr(self.value)))
         return str(self.value)
     
     def draw(self, canvas):

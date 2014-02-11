@@ -27,10 +27,10 @@ class PlayerHuman(Player):
             move = console.DialogEntry(self.app.game, "Your move: ").get()
             
             if self.app.board.isMoveLegal(move):
+                self.app.board.move(move)
                 break
             else:
                 print("Not a legal move!")
-        return move
     
 class PlayerComputer(Player):
     def __init__(self, depth=12):
@@ -46,15 +46,16 @@ class PlayerComputer(Player):
                 move = results[0]
                 pondermove = results[2]
                 break
+        print("Black plays {}!".format(move))
         self.app.board.move(move)
 
 class Board(object):
-    moves = []
     app = None
     def __init__(self):
-        pass
+        self.moves = []
     
     def move(self, move):
+        log.debug("adding move to board")
         self.moves.append(move)
         
     def isMoveLegal(self, move):
@@ -96,6 +97,7 @@ class Chess(engine.Application):
         self.enginePut("uci")
 
     def enginePut(self, command):
+        log.debug("Message to Stockfish: {}".format(command))
         self.engine.stdin.write(command + "\n")
         
     def engineGet(self):
@@ -118,8 +120,10 @@ class Chess(engine.Application):
 
         while True:
             self.syncPosition()
+            log.debug("White player is taking a turn")
             self.playerWhite.move()
             self.syncPosition()
+            log.debug("Black player is taking a turn")
             self.playerBlack.move()
 
 if __name__ == "__main__":
