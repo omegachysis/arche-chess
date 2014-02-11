@@ -2,6 +2,7 @@
 
 from arche import engine
 from arche import debug
+from arche import console
 
 import subprocess
 
@@ -23,7 +24,8 @@ class PlayerHuman(Player):
     def move(self):
         move = None
         while True:
-            move = input("Your move: ")
+            move = console.DialogEntry(self.app.game, "Your move: ").get()
+            
             if self.app.board.isMoveLegal(move):
                 break
             else:
@@ -53,7 +55,7 @@ class Board(object):
         pass
     
     def move(self, move):
-        moves.append(move)
+        self.moves.append(move)
         
     def isMoveLegal(self, move):
         self.app.enginePut("go depth 2 searchmoves {}".format(move))
@@ -98,9 +100,9 @@ class Chess(engine.Application):
         
     def engineGet(self):
         data = ""
-        engine.stdin.write('isready\n')
+        self.engine.stdin.write('isready\n')
         while True:
-            text = engine.stdout.readline().strip()
+            text = self.engine.stdout.readline().strip()
             if text == 'readyok':
                 break
             if text !='':
