@@ -11,8 +11,8 @@ levelLogFile = INFO
 
 exec(open("config/debug.cfg").read())
 
-log = logging.getLogger("R") # "R" stands for 'root'
-log.setLevel(levelGameConsole)
+alog = logging.getLogger("R")
+alog.setLevel(levelGameConsole)
 
 console = logging.StreamHandler()
 console.setLevel(levelSystemConsole)
@@ -25,12 +25,20 @@ formatter = logging.Formatter(formatLogging)
 console.setFormatter(formatter)
 logfile.setFormatter(formatter)
 
-log.addHandler(console)
-log.addHandler(logfile)
+alog.addHandler(console)
+alog.addHandler(logfile)
+
+def log(name):
+    name = name.replace(".", " ")
+    name = name.title()
+    name = name.replace(" ", ".")
+    name = "R." + name
+
+    return logging.getLogger(name)
 
 def test(main):
-    log.info("starting tests")
+    alog.info("starting tests")
     try:
         main()
     except:
-        log.critical(traceback.format_exc())
+        alog.critical(traceback.format_exc())

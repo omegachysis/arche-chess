@@ -3,10 +3,7 @@
 from arche import engine
 from arche import debug
 
-import logging
-
-log = logging.getLogger("R.Main")
-
+log = debug.log("game main")
 def main():
     log.info("starting main")
 
