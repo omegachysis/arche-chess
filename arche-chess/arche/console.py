@@ -251,8 +251,11 @@ class GameConsole(object):
 
                     self._recalculateCoordinates()
             except:
-                log.error("!@ error rendering last stream" +\
+                if False:
+                    log.error("!@ error rendering last stream" +\
                           traceback.format_exc())
+                else:
+                    pass
 
     def _recalculateCoordinates(self):
         i = len(self.messages)
